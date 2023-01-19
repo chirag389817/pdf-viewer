@@ -12,10 +12,11 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         layout="@layout/tool_bar"/>
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
+    <GridView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Open File"
-        android:onClick="openFile"/>
+        android:numColumns="3"
+        android:padding="10dp"
+        android:id="@+id/gridView"/>
 
 </LinearLayout>

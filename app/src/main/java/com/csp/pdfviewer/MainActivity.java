@@ -14,7 +14,10 @@ import androidx.core.app.ActivityOptionsCompat;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,11 +28,35 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         setMyActionBar();
+        setGridView();
+    }
+
+    private void setGridView() {
+        GridView gridView=findViewById(R.id.gridView);
+        gridView.setAdapter(new GridViewAdapterMain(this));
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                switch (position){
+                    case 0:openFile();
+                        break;
+                }
+            }
+        });
     }
 
     private void setMyActionBar() {
         Toolbar toolbar=findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+    }
+
+    public void openFile() {
+        Intent pdfPickerIntent =new Intent();
+        pdfPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
+        pdfPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
+        pdfPickerIntent.setType("application/pdf");
+        Intent picker=Intent.createChooser(pdfPickerIntent,"Choose PDF File");
+        launcher.launch(picker);
     }
 
     ActivityResultLauncher<Intent> launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -40,12 +67,4 @@ public class MainActivity extends AppCompatActivity {
         }
     });
 
-    public void openFile(View view) {
-        Intent pdfPickerIntent =new Intent();
-        pdfPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
-        pdfPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-        pdfPickerIntent.setType("application/pdf");
-        Intent picker=Intent.createChooser(pdfPickerIntent,"Choose PDF File");
-        launcher.launch(picker);
-    }
 }
