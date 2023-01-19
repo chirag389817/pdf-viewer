@@ -43,6 +43,13 @@ public class PdfViewer extends AppCompatActivity {
         }finally {
             cursor.close();
         }
+        if (name == null) {
+            name = uri.getPath();
+            int cut = name.lastIndexOf('/');
+            if (cut != -1) {
+                name = name.substring(cut + 1);
+            }
+        }
         return  name;
     }
 }
