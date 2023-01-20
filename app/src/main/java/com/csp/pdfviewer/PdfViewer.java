@@ -22,7 +22,7 @@ public class PdfViewer extends AppCompatActivity {
         setMyActionBar();
 
         PDFView pdfView=findViewById(R.id.pdfView);
-        getSupportActionBar().setTitle(getFileName(getIntent().getData()));
+        getSupportActionBar().setTitle(PdfUriUtils.getPdfName(this,getIntent().getData()));
         pdfView.fromUri(getIntent().getData())
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();
@@ -33,23 +33,4 @@ public class PdfViewer extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    @SuppressLint("Range")
-    private String getFileName(Uri uri){
-        String name=null;
-        Cursor cursor=getContentResolver().query(uri,null,null,null,null);
-        try{
-            if(cursor!=null && cursor.moveToFirst())
-                name=cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
-        }finally {
-            cursor.close();
-        }
-        if (name == null) {
-            name = uri.getPath();
-            int cut = name.lastIndexOf('/');
-            if (cut != -1) {
-                name = name.substring(cut + 1);
-            }
-        }
-        return  name;
-    }
 }
