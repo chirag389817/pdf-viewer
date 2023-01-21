@@ -8,7 +8,7 @@ public class PageSet {
     public static int TYPE_RANGE = 202;
     public static int TYPE_CUSTOM = 203;
 
-    int fromPage=-9;
+    int fromPage=0;
     int toPage=0;
     int typeCode=-1;
 

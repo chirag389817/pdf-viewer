@@ -13,19 +13,22 @@ import android.util.Log;
 import com.shockwave.pdfium.PdfDocument;
 import com.shockwave.pdfium.PdfiumCore;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 
 public class PdfInfo {
 
-    Uri uri;
-    String name="";
-    Context context;
-    String size="-1";
-    int pageCount=-1;
+    public Uri uri;
+    public String name="";
+    public Context context;
+    public String size="-1";
+    public int pageCount=-1;
+    public File file;
 
     public PdfInfo(Context context,Uri uri){
         this.context=context;
         this.uri=uri;
+        file=new File(uri.getPath());
         loadInfo();
     }
 

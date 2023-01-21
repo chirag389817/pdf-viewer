@@ -38,4 +38,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
+    implementation 'com.tom-roush:pdfbox-android:2.0.27.0'
 }
