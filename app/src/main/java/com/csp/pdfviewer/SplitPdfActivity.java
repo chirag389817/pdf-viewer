@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,12 +20,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.csp.pdfviewer.adapters.RecyclerAdapterPageset;
 import com.csp.pdfviewer.tools.PdfSplitter;
+import com.csp.pdfviewer.utilclasses.PdfInfo;
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
-
-import java.util.ArrayList;
 
 public class SplitPdfActivity extends AppCompatActivity {
 
@@ -79,15 +79,19 @@ public class SplitPdfActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(SplitPdfActivity.this, Integer.toString(splitter.splitedPdfs.size()), Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
+                            Intent showResult=new Intent(SplitPdfActivity.this,ResultActivity.class);
+                            showResult.putExtra(ResultActivity.RESULT_KEY,"Splited PDFs");
+                            showResult.putExtra(ResultActivity.LIST_KEY,splitter.splitedPdfs);
+                            startActivity(showResult);
+                            finish();
                         }
                     });
                 }
             });
         });
         cardView.setOnClickListener(view->{
-            Intent openPdfIntent=new Intent(this,PdfViewer.class);
+            Intent openPdfIntent=new Intent(this, PdfViewerActivity.class);
             openPdfIntent.setData(pdfInfo.uri);
             startActivity(openPdfIntent);
         });
@@ -113,6 +117,7 @@ public class SplitPdfActivity extends AppCompatActivity {
         cardSplit=findViewById(R.id.cardSplit);
         recyclerView=findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         cardAddSet=findViewById(R.id.cardAddSet);
     }
 
@@ -120,7 +125,7 @@ public class SplitPdfActivity extends AppCompatActivity {
         pdfInfo=new PdfInfo(this,uri);
         txtPdfName.setText(pdfInfo.name);
         txtPdfInfo.setText(pdfInfo.pageCount+" Pages "+pdfInfo.size);
-        imgThumbnail.setImageBitmap(pdfInfo.getThumnail(0));
+        imgThumbnail.setImageBitmap(pdfInfo.getPageThumnail(0));
 
         adapterPageset=new RecyclerAdapterPageset(this,RecyclerAdapterPageset.ACTION_SPLIT,pdfInfo.name);
         recyclerView.setAdapter(adapterPageset);

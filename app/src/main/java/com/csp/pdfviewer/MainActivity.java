@@ -1,25 +1,20 @@
 package com.csp.pdfviewer;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.app.ActivityOptionsCompat;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
+
+import com.csp.pdfviewer.adapters.GridViewAdapterMain;
 
 import java.util.ArrayList;
 
@@ -111,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openPdf(Uri fileUri) {
-        Intent openPdfIntent=new Intent(MainActivity.this,PdfViewer.class);
+        Intent openPdfIntent=new Intent(MainActivity.this, PdfViewerActivity.class);
         openPdfIntent.setData(fileUri);
         startActivity(openPdfIntent);
     }

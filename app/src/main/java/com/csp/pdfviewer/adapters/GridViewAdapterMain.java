@@ -1,4 +1,4 @@
-package com.csp.pdfviewer;
+package com.csp.pdfviewer.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -9,6 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.csp.pdfviewer.R;
 
 public class GridViewAdapterMain extends BaseAdapter {
 

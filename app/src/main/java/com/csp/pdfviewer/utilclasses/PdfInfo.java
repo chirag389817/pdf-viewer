@@ -1,4 +1,4 @@
-package com.csp.pdfviewer;
+package com.csp.pdfviewer.utilclasses;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -19,9 +19,9 @@ import java.io.FileNotFoundException;
 public class PdfInfo {
 
     public Uri uri;
-    public String name="";
+    public String name=null;
     public Context context;
-    public String size="-1";
+    public String size=null;
     public int pageCount=-1;
     public File file;
 
@@ -39,19 +39,12 @@ public class PdfInfo {
             if(cursor!=null && cursor.moveToFirst()) {
                 name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
                 size = cursor.getString(cursor.getColumnIndex(OpenableColumns.SIZE));
-                int sizeInt=Integer.parseInt(size);
-                sizeInt/=1024;
-                if (sizeInt<1024){
-                    size=Integer.toString(sizeInt,0)+" KB";
-                }else{
-                    float sizeFloat=sizeInt/1024.0f;
-                    size=Float.toString(sizeFloat);
-                    size=size.substring(0,size.lastIndexOf(".")+3);
-                    size=size+" MB";
-                }
             }
-        }finally {
-            cursor.close();
+            if (cursor != null) {
+                cursor.close();
+            }
+        }catch (Exception obj){
+            Log.e("RecyclerAdapterResult", "loadInfo: "+obj.toString());
         }
         if (name == null) {
             name = uri.getPath();
@@ -59,23 +52,36 @@ public class PdfInfo {
             if (cut != -1) {
                 name = name.substring(cut + 1);
             }
+        }else{
+            name=name.substring(0,name.lastIndexOf("."));
         }
-        name=name.substring(0,name.lastIndexOf("."));
+
+        if(size==null){
+            size=Long.toString(file.length());
+        }
+        int sizeInt=Integer.parseInt(size);
+        sizeInt/=1024;
+        if (sizeInt<1024){
+            size=Integer.toString(sizeInt,0)+" KB";
+        }else{
+            float sizeFloat=sizeInt/1024.0f;
+            size=Float.toString(sizeFloat);
+            size=size.substring(0,size.lastIndexOf(".")+3);
+            size=size+" MB";
+        }
 
         try {
             ParcelFileDescriptor parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri,"r");
             PdfRenderer pdfRenderer = null;
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                pdfRenderer = new PdfRenderer(parcelFileDescriptor);
-                pageCount = pdfRenderer.getPageCount();
-                pdfRenderer.close();
-            }
+            pdfRenderer = new PdfRenderer(parcelFileDescriptor);
+            pageCount = pdfRenderer.getPageCount();
+            pdfRenderer.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public Bitmap getThumnail(int pageIndex){
+    public Bitmap getPageThumnail(int pageIndex){
         PdfiumCore pdfiumCore=new PdfiumCore(context);
         try {
             ParcelFileDescriptor pd=context.getContentResolver().openFileDescriptor(uri,"r");
@@ -91,5 +97,38 @@ public class PdfInfo {
             Log.e("Thumbnail",obj.toString());
         }
         return null;
+    }
+
+    public static Bitmap getThumnail(Context context, Uri uri){
+        int pageIndex=0;
+        PdfiumCore pdfiumCore=new PdfiumCore(context);
+        try {
+            ParcelFileDescriptor pd=context.getContentResolver().openFileDescriptor(uri,"r");
+            PdfDocument pdfDocument=pdfiumCore.newDocument(pd);
+            pdfiumCore.openPage(pdfDocument,pageIndex);
+            int width=pdfiumCore.getPageWidthPoint(pdfDocument,pageIndex);
+            int height=pdfiumCore.getPageHeightPoint(pdfDocument,pageIndex);
+            Bitmap bitmap=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
+            pdfiumCore.renderPageBitmap(pdfDocument,bitmap,pageIndex,0,0,width,height);
+            pdfiumCore.closeDocument(pdfDocument);
+            return  bitmap;
+        }catch (Exception obj){
+            Log.e("Thumbnail",obj.toString());
+        }
+        return null;
+    }
+
+    public static int getPageCount(Context context,Uri uri){
+        int pageCount = -1;
+        try {
+            ParcelFileDescriptor parcelFileDescriptor = context.getContentResolver().openFileDescriptor(uri,"r");
+            PdfRenderer pdfRenderer = null;
+            pdfRenderer = new PdfRenderer(parcelFileDescriptor);
+            pageCount = pdfRenderer.getPageCount();
+            pdfRenderer.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return pageCount;
     }
 }

@@ -1,10 +1,7 @@
-package com.csp.pdfviewer;
+package com.csp.pdfviewer.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Handler;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +16,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.csp.pdfviewer.R;
+import com.csp.pdfviewer.utilclasses.PageSet;
 
 import java.util.ArrayList;
 
@@ -158,7 +158,7 @@ public class RecyclerAdapterPageset extends RecyclerView.Adapter<RecyclerAdapter
             ArrayList<String> spinnerItems=new ArrayList<>();
             spinnerItems.add("All");
             spinnerItems.add("Range");
-            spinnerItems.add("Custom");
+//            spinnerItems.add("Custom");
             ArrayAdapter<String> spinnerAdapter=new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item,spinnerItems);
             spinner.setAdapter(spinnerAdapter);
         }

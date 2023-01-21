@@ -9,10 +9,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 
+import com.csp.pdfviewer.utilclasses.PdfInfo;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 
-public class PdfViewer extends AppCompatActivity {
+public class PdfViewerActivity extends AppCompatActivity {
+
+    PdfInfo pdfInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,9 +24,11 @@ public class PdfViewer extends AppCompatActivity {
 
         setMyActionBar();
 
+        pdfInfo=new PdfInfo(this,getIntent().getData());
+
         PDFView pdfView=findViewById(R.id.pdfView);
-        getSupportActionBar().setTitle(PdfUriUtils.getPdfName(this,getIntent().getData()));
-        pdfView.fromUri(getIntent().getData())
+        getSupportActionBar().setTitle(pdfInfo.name);
+        pdfView.fromUri(pdfInfo.uri)
                 .scrollHandle(new DefaultScrollHandle(this))
                 .load();
     }

@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".PdfViewerActivity">
+    android:layout_height="match_parent"
+    tools:context=".ResultActivity">
+
     <include
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         layout="@layout/tool_bar"/>
-    <com.github.barteksc.pdfviewer.PDFView
-        android:id="@+id/pdfView"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:id="@+id/recyclerView"/>
 </LinearLayout>

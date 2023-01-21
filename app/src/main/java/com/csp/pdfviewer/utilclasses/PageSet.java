@@ -1,4 +1,4 @@
-package com.csp.pdfviewer;
+package com.csp.pdfviewer.utilclasses;
 
 import java.util.ArrayList;
 

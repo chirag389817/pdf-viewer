@@ -1,13 +1,11 @@
 package com.csp.pdfviewer.tools;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
-import com.csp.pdfviewer.FileManager;
-import com.csp.pdfviewer.PageSet;
-import com.csp.pdfviewer.PdfInfo;
+import com.csp.pdfviewer.utilclasses.FileManager;
+import com.csp.pdfviewer.utilclasses.PageSet;
+import com.csp.pdfviewer.utilclasses.PdfInfo;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
@@ -20,7 +18,7 @@ public class PdfSplitter{
     Context context;
     PdfInfo pdfToSplit;
     ArrayList<PageSet> pageSetArrayList;
-    public ArrayList<Uri> splitedPdfs=new ArrayList<>();
+    public ArrayList<String> splitedPdfs=new ArrayList<>();
     File dirToSave;
 
 
@@ -62,7 +60,7 @@ public class PdfSplitter{
                 if(newDocument!=document){
                     newDocument.close();
                 }
-                splitedPdfs.add(Uri.fromFile(fileToSave));
+                splitedPdfs.add(fileToSave.getPath());
                 Log.d(TAG,"splited "+pageSet.getPdfName());
             }
             document.close();
