@@ -51,16 +51,20 @@ public class PdfSplitter{
                         newDocument.addPage(document.getPage(page));
                     }
                 }else if(pageSet.getTypeCode()==PageSet.TYPE_CUSTOM){
-
+                    for (int page: pageSet.getSelectedPages()){
+                        newDocument.addPage(document.getPage(page));
+                    }
                 }else {
                     Log.e(TAG,Integer.toString(pageSet.getTypeCode()));
                     return;
                 }
-                newDocument.save(fileToSave);
+                if(newDocument.getNumberOfPages()>0){
+                    newDocument.save(fileToSave);
+                    splitedPdfs.add(fileToSave.getPath());
+                }
                 if(newDocument!=document){
                     newDocument.close();
                 }
-                splitedPdfs.add(fileToSave.getPath());
                 Log.d(TAG,"splited "+pageSet.getPdfName());
             }
             document.close();

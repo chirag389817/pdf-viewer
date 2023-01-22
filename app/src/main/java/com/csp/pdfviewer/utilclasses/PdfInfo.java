@@ -15,6 +15,7 @@ import com.shockwave.pdfium.PdfiumCore;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
 public class PdfInfo {
 

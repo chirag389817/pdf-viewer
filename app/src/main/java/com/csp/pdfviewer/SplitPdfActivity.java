@@ -57,6 +57,12 @@ public class SplitPdfActivity extends AppCompatActivity {
         }
     });
 
+    ActivityResultLauncher<Intent> selectPagesLauncher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result->{
+        if(result.getResultCode()==RESULT_OK){
+            adapterPageset.updatePageSet(result.getData());
+        }
+    });
+
     private void initialLogic() {
         cardSplit.setOnClickListener(view -> {
             View edit=this.getCurrentFocus();
@@ -80,11 +86,13 @@ public class SplitPdfActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             progressDialog.dismiss();
-                            Intent showResult=new Intent(SplitPdfActivity.this,ResultActivity.class);
-                            showResult.putExtra(ResultActivity.RESULT_KEY,"Splited PDFs");
-                            showResult.putExtra(ResultActivity.LIST_KEY,splitter.splitedPdfs);
-                            startActivity(showResult);
-                            finish();
+                            if(splitter.splitedPdfs.size()>0){
+                                Intent showResult=new Intent(SplitPdfActivity.this,ResultActivity.class);
+                                showResult.putExtra(ResultActivity.RESULT_KEY,"Splited PDFs");
+                                showResult.putExtra(ResultActivity.LIST_KEY,splitter.splitedPdfs);
+                                startActivity(showResult);
+                                finish();
+                            }
                         }
                     });
                 }
@@ -127,7 +135,7 @@ public class SplitPdfActivity extends AppCompatActivity {
         txtPdfInfo.setText(pdfInfo.pageCount+" Pages "+pdfInfo.size);
         imgThumbnail.setImageBitmap(pdfInfo.getPageThumnail(0));
 
-        adapterPageset=new RecyclerAdapterPageset(this,RecyclerAdapterPageset.ACTION_SPLIT,pdfInfo.name);
+        adapterPageset=new RecyclerAdapterPageset(this,RecyclerAdapterPageset.ACTION_SPLIT,pdfInfo,selectPagesLauncher);
         recyclerView.setAdapter(adapterPageset);
     }
 

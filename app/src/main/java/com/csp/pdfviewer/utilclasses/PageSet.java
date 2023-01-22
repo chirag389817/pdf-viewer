@@ -13,7 +13,7 @@ public class PageSet {
     int typeCode=-1;
 
     String pdfName;
-    ArrayList<Integer> selectedPages=null;
+    ArrayList<Integer> selectedPages=new ArrayList<>();
 
     public PageSet(PageSet old){
         this.fromPage=old.getFromPage();
@@ -67,6 +67,16 @@ public class PageSet {
 
     public ArrayList<Integer> getSelectedPages() {
         return selectedPages;
+    }
+    public String getSelectedPagesString() {
+        String txt="";
+        for(int i:selectedPages){
+            txt = txt + (i+1) + ", ";
+        }
+        if(txt.length()>2) {
+            txt = txt.substring(0, txt.length() - 2);
+        }
+        return txt;
     }
 
     public void setSelectedPages(ArrayList<Integer> selectedPages) {
