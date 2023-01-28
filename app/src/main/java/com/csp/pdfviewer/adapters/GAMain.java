@@ -12,13 +12,13 @@ import android.widget.TextView;
 
 import com.csp.pdfviewer.R;
 
-public class GridViewAdapterMain extends BaseAdapter {
+public class GAMain extends BaseAdapter {
 
     Context context;
     String[] itemNames={"Open","Merge","Split"};
     int[] itemIcons={R.drawable.open_pdf,R.drawable.merge_pdf,R.drawable.split_pdf};
 
-    public GridViewAdapterMain(Context context){
+    public GAMain(Context context){
         this.context=context;
     }
 

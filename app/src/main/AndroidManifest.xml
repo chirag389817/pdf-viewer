@@ -18,6 +18,9 @@
         android:theme="@style/Theme.Pdfviewer"
         tools:targetApi="31">
         <activity
+            android:name=".MergePdfActivity"
+            android:exported="false" />
+        <activity
             android:name=".SelectPagesActivity"
             android:exported="false" />
         <activity

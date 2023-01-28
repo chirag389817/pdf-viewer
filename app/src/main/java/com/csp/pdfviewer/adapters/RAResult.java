@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.csp.pdfviewer.PdfViewerActivity;
@@ -23,14 +22,14 @@ import com.csp.pdfviewer.utilclasses.PdfInfo;
 import java.io.File;
 import java.util.ArrayList;
 
-public class RecyclerAdapterResult extends RecyclerView.Adapter<RecyclerAdapterResult.ViewHolder> {
+public class RAResult extends RecyclerView.Adapter<RAResult.ViewHolder> {
 
     Context context;
     ArrayList<String> listPaths;
 
-    private static final String TAG = "RecyclerAdapterResult";
+    private static final String TAG = "RAResult";
 
-    public RecyclerAdapterResult(Context context, ArrayList<String> listPaths) {
+    public RAResult(Context context, ArrayList<String> listPaths) {
         this.context = context;
         this.listPaths = listPaths;
     }

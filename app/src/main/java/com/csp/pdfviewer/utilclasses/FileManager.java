@@ -1,12 +1,15 @@
 package com.csp.pdfviewer.utilclasses;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 
 import java.io.File;
@@ -29,6 +32,11 @@ public class FileManager {
         File file = new File(dir + "/" + subDir);
         if (file.mkdirs()) return file;
         else return makeDir(dir,subDir+"(1)");
+    }
+
+    public static File getMergeFile(String fileName){
+        new File(MERGE_DIR).mkdirs();
+        return new File(MERGE_DIR+"/"+fileName+".pdf");
     }
 
     public static String getSize(File file){
@@ -66,5 +74,22 @@ public class FileManager {
         }
         Bitmap thumbBitmap = ThumbnailUtils.extractThumbnail(bitmap,120,120);
         return thumbBitmap;
+    }
+
+    @SuppressLint("Range")
+    public static String getName(Context context, Uri uri){
+        String name = null;
+        Cursor cursor=context.getContentResolver().query(uri,null,null,null,null);
+        try{
+            if(cursor!=null && cursor.moveToFirst()) {
+                name = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME));
+            }
+            if (cursor != null) {
+                cursor.close();
+            }
+        }catch (Exception obj){
+            Log.e("FileManager", "loadInfo: "+obj.toString());
+        }
+        return name;
     }
 }

@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".PdfViewerActivity">
-    <include
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        layout="@layout/tool_bar"/>
     <com.github.barteksc.pdfviewer.PDFView
         android:id="@+id/pdfView"
         android:layout_width="match_parent"

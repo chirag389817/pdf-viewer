@@ -3,9 +3,12 @@ package com.csp.pdfviewer.tools;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.csp.pdfviewer.utilclasses.FileManager;
 import com.csp.pdfviewer.utilclasses.PageSet;
 import com.csp.pdfviewer.utilclasses.PdfInfo;
+import com.tom_roush.pdfbox.android.PDFBoxResourceLoader;
 import com.tom_roush.pdfbox.pdmodel.PDDocument;
 
 import java.io.File;
@@ -24,6 +27,7 @@ public class PdfSplitter{
 
     public PdfSplitter(Context context){
         this.context=context;
+        PDFBoxResourceLoader.init(context.getApplicationContext());
     }
 
     public void split(PdfInfo pdfToSplit, ArrayList<PageSet> pageSetArrayList){
@@ -40,22 +44,22 @@ public class PdfSplitter{
             PDDocument document = PDDocument.load(context.getContentResolver().openInputStream(pdfToSplit.uri));
             dirToSave = FileManager.makeDir(FileManager.SPLIT_DIR,pdfToSplit.name);
             for(PageSet pageSet : pageSetArrayList){
-                File fileToSave = FileManager.getFile(dirToSave,pageSet.getPdfName());
+                File fileToSave = FileManager.getFile(dirToSave,pageSet.pdfName);
                 PDDocument newDocument=new PDDocument();
-                if(pageSet.getTypeCode()==PageSet.TYPE_ALL){
+                if(pageSet.typeCode==PageSet.TYPE_ALL){
                     newDocument=document;
-                }else if(pageSet.getTypeCode()==PageSet.TYPE_RANGE){
-                    if(pageSet.getFromPage()==0 && pageSet.getToPage()==0) continue;
-                    if(pageSet.getFromPage()==0) pageSet.setFromPage(1);
-                    for (int page=pageSet.getFromPage()-1; page<pageSet.getToPage() && page<pdfToSplit.pageCount; page++){
+                }else if(pageSet.typeCode==PageSet.TYPE_RANGE){
+                    if(pageSet.fromPage==0 && pageSet.toPage==0) continue;
+                    if(pageSet.fromPage==0) pageSet.fromPage=(1);
+                    for (int page=pageSet.fromPage-1; page<pageSet.toPage && page<pdfToSplit.pageCount; page++){
                         newDocument.addPage(document.getPage(page));
                     }
-                }else if(pageSet.getTypeCode()==PageSet.TYPE_CUSTOM){
+                }else if(pageSet.typeCode==PageSet.TYPE_CUSTOM){
                     for (int page: pageSet.getSelectedPages()){
                         newDocument.addPage(document.getPage(page));
                     }
                 }else {
-                    Log.e(TAG,Integer.toString(pageSet.getTypeCode()));
+                    Log.e(TAG,Integer.toString(pageSet.typeCode));
                     return;
                 }
                 if(newDocument.getNumberOfPages()>0){
@@ -65,7 +69,7 @@ public class PdfSplitter{
                 if(newDocument!=document){
                     newDocument.close();
                 }
-                Log.d(TAG,"splited "+pageSet.getPdfName());
+                Log.d(TAG,"splited "+pageSet.pdfName);
             }
             document.close();
         }catch (Exception obj){

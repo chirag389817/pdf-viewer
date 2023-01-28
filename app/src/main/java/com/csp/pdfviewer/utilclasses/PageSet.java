@@ -1,31 +1,29 @@
 package com.csp.pdfviewer.utilclasses;
 
+import android.net.Uri;
+
+import java.io.File;
 import java.util.ArrayList;
 
 public class PageSet {
 
-    public static int TYPE_ALL = 201;
-    public static int TYPE_RANGE = 202;
-    public static int TYPE_CUSTOM = 203;
+    public static final int TYPE_ALL = 201;
+    public static final int TYPE_RANGE = 202;
+    public static final int TYPE_CUSTOM = 203;
 
-    int fromPage=0;
-    int toPage=0;
-    int typeCode=-1;
+    public int fromPage=0;
+    public int toPage=0;
+    public int typeCode=-1;
 
-    String pdfName;
-    ArrayList<Integer> selectedPages=new ArrayList<>();
+    public String pdfName;
+    public Uri uri;
 
-    public PageSet(PageSet old){
-        this.fromPage=old.getFromPage();
-        this.toPage= old.getToPage();
-        this.typeCode= old.getTypeCode();
-        this.pdfName= old.getPdfName();
-        this.selectedPages= old.getSelectedPages();
-    }
+    public ArrayList<Integer> selectedPages=new ArrayList<>();
 
-    public PageSet(String pdfName){
+    public PageSet(Uri uri){
         typeCode=TYPE_ALL;
-        this.pdfName=pdfName;
+        this.uri=uri;
+        this.pdfName=new File(uri.getPath()).getName();
     }
 
     public PageSet(int fromPage, int toPage,String pdfName){
@@ -33,36 +31,6 @@ public class PageSet {
         this.fromPage=fromPage;
         this.pdfName=pdfName;
         this.toPage=toPage;
-    }
-
-    public PageSet(ArrayList<Integer> selectedPages,String pdfName){
-        typeCode=TYPE_CUSTOM;
-        this.pdfName=pdfName;
-        this.selectedPages=selectedPages;
-    }
-
-    public int getFromPage() {
-        return fromPage;
-    }
-
-    public void setFromPage(int fromPage) {
-        this.fromPage = fromPage;
-    }
-
-    public int getToPage() {
-        return toPage;
-    }
-
-    public void setToPage(int toPage) {
-        this.toPage = toPage;
-    }
-
-    public int getTypeCode() {
-        return typeCode;
-    }
-
-    public void setTypeCode(int typeCode) {
-        this.typeCode = typeCode;
     }
 
     public ArrayList<Integer> getSelectedPages() {
@@ -77,18 +45,6 @@ public class PageSet {
             txt = txt.substring(0, txt.length() - 2);
         }
         return txt;
-    }
-
-    public void setSelectedPages(ArrayList<Integer> selectedPages) {
-        this.selectedPages = selectedPages;
-    }
-
-    public String getPdfName() {
-        return pdfName;
-    }
-
-    public void setPdfName(String pdfName) {
-        this.pdfName = pdfName;
     }
 
 }

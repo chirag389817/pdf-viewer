@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.pdf.PdfRenderer;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
 import android.provider.OpenableColumns;
@@ -45,7 +47,7 @@ public class PdfInfo {
                 cursor.close();
             }
         }catch (Exception obj){
-            Log.e("RecyclerAdapterResult", "loadInfo: "+obj.toString());
+            Log.e("RAResult", "loadInfo: "+obj.toString());
         }
         if (name == null) {
             name = uri.getPath();
@@ -92,6 +94,7 @@ public class PdfInfo {
             int height=pdfiumCore.getPageHeightPoint(pdfDocument,pageIndex);
             Bitmap bitmap=Bitmap.createBitmap(width,height,Bitmap.Config.ARGB_8888);
             pdfiumCore.renderPageBitmap(pdfDocument,bitmap,pageIndex,0,0,width,height);
+            bitmap=ThumbnailUtils.extractThumbnail(bitmap,100,150);
             pdfiumCore.closeDocument(pdfDocument);
             return  bitmap;
         }catch (Exception obj){

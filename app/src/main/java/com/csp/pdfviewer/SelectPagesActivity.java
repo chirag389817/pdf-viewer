@@ -2,46 +2,50 @@ package com.csp.pdfviewer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.csp.pdfviewer.adapters.RecyclerAdapterSelectPages;
-import com.csp.pdfviewer.utilclasses.PdfInfo;
-
-import java.util.ArrayList;
+import com.csp.pdfviewer.adapters.RAPagesSelector;
+import com.csp.pdfviewer.databinding.ActivitySelectPagesBinding;
+import com.csp.pdfviewer.dialogs.LoadingDialog;
+import com.csp.pdfviewer.utilclasses.ACBar;
+import com.csp.pdfviewer.utilclasses.Thumbnails;
 
 public class SelectPagesActivity extends AppCompatActivity {
-
-    RecyclerAdapterSelectPages adapterSelectPages;
 
     private static final String TAG = "SelectPagesActivity";
     public static final String LIST_KEY = "result_list_key";
 
+    ActivitySelectPagesBinding binding;
+    RAPagesSelector adapterSelectPages;
+    LoadingDialog loadingDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_pages);
+        binding=ActivitySelectPagesBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        setMyActionBar();
+        ACBar.setActionBar(this,binding.getRoot(),"Select Pages");
 
-        RecyclerView recyclerView=findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new GridLayoutManager(this,3));
-        adapterSelectPages = new RecyclerAdapterSelectPages(this,new PdfInfo(this,getIntent().getData()),getIntent().getIntegerArrayListExtra(LIST_KEY));
-        recyclerView.setAdapter(adapterSelectPages);
-    }
+        loadingDialog = new LoadingDialog(this);
+        loadingDialog.show();
 
-    private void setMyActionBar() {
-        Toolbar toolbar=findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Select Pages");
+
+        new Handler().post(()->{
+            Thumbnails thumbnails = new Thumbnails(this,getIntent().getData());
+            runOnUiThread(()->{
+                binding.recyclerView.setLayoutManager(new GridLayoutManager(this,3));
+                adapterSelectPages = new RAPagesSelector(this,thumbnails,getIntent().getIntegerArrayListExtra(LIST_KEY));
+                binding.recyclerView.setAdapter(adapterSelectPages);
+                loadingDialog.dismiss();
+            });
+        });
     }
 
     @Override
@@ -55,16 +59,10 @@ public class SelectPagesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getTitle().equals("done")){
-
-            ArrayList<Integer> selectedPages = adapterSelectPages.getSelectedPages();
-            Log.d(TAG, "onOptionsItemSelected: "+selectedPages.size());
-
-            Intent goBackIntent=new Intent(this,SplitPdfActivity.class);
-            goBackIntent.putIntegerArrayListExtra(LIST_KEY,selectedPages);
-            goBackIntent.putExtra("position",getIntent().getIntExtra("position",-1));
+            Intent goBackIntent=new Intent();
+            goBackIntent.putIntegerArrayListExtra(LIST_KEY,adapterSelectPages.getSelectedPages());
             setResult(RESULT_OK,goBackIntent);
             finish();
-
         }
         return true;
     }
