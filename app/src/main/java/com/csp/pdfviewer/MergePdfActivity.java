@@ -6,12 +6,17 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,9 +24,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.csp.pdfviewer.adapters.Drager;
 import com.csp.pdfviewer.adapters.RAPageSet;
 import com.csp.pdfviewer.databinding.ActivityMergePdfBinding;
-import com.csp.pdfviewer.databinding.DialogMergeBinding;
+import com.csp.pdfviewer.databinding.DialogNameBinding;
+import com.csp.pdfviewer.dialogs.LoadingDialog;
+import com.csp.pdfviewer.dialogs.NameDialog;
 import com.csp.pdfviewer.tools.PdfMerger;
 import com.csp.pdfviewer.utilclasses.ACBar;
+import com.csp.pdfviewer.utilclasses.Launcher;
 import com.csp.pdfviewer.utilclasses.PageSet;
 
 import java.io.File;
@@ -33,8 +41,8 @@ public class MergePdfActivity extends AppCompatActivity {
 
     ActivityMergePdfBinding binding;
     RAPageSet raPageSet;
-    ProgressDialog progressDialog;
-    Dialog MergeDialog;
+    LoadingDialog loadingDialog;
+    NameDialog nameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,33 +61,17 @@ public class MergePdfActivity extends AppCompatActivity {
 
         addPdfs();
 
+        loadingDialog=new LoadingDialog(this,"Merging...");
+        nameDialog=new NameDialog(this);
+        nameDialog.setOnConfirmListener(this::merge);
 
-
-        progressDialog=new ProgressDialog(this);
-        progressDialog.setMessage("Merging...");
-        progressDialog.setCancelable(false);
-
-        MergeDialog =new Dialog(this);
-        DialogMergeBinding dialogBinding = DialogMergeBinding.inflate(getLayoutInflater());
-        MergeDialog.setContentView(dialogBinding.getRoot());
-        MergeDialog.getWindow().setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        MergeDialog.setOnShowListener(dialogInterface -> {
-            dialogBinding.editName.requestFocus();
-        });
-        dialogBinding.txtCancel.setOnClickListener(view -> MergeDialog.dismiss());
-        dialogBinding.txtConfirm.setOnClickListener(view -> {
-            MergeDialog.dismiss();
-            progressDialog.show();
-            merge(dialogBinding.editName.getText().toString());
-        });
-
-        binding.cardAdd.setOnClickListener(view-> addPdfs());
+        binding.cardAdd.setOnClickListener(view -> addPdfs());
 
         binding.cardMerge.setOnClickListener(view -> {
             if(getCurrentFocus()!=null)
                 getCurrentFocus().clearFocus();
             if(raPageSet.getItemCount()>1){
-                MergeDialog.show();
+                nameDialog.show();
             }else{
                 Toast.makeText(this, "Select at least two PDFs", Toast.LENGTH_SHORT).show();
             }
@@ -88,10 +80,11 @@ public class MergePdfActivity extends AppCompatActivity {
     }
 
     void merge(String fileName){
+        loadingDialog.show();
         new Handler().post(() -> {
             File mergedPdf =new PdfMerger(MergePdfActivity.this).merge(raPageSet.getPageSetArrayList(),fileName);
             runOnUiThread(()->{
-                progressDialog.dismiss();
+                loadingDialog.dismiss();
                 if(mergedPdf!=null){
                     if(mergedPdf.exists()){
                         Intent viewPdf = new Intent(getApplicationContext(),PdfViewerActivity.class);

@@ -21,6 +21,7 @@ public class FileManager {
     public static final String STORAGE_DIR = SYSTEM_DIR + "/PDF Documents";
     public static final String SPLIT_DIR = STORAGE_DIR + "/Split";
     public static final String MERGE_DIR = STORAGE_DIR + "/Merge";
+    public static final String IMG_TO_DIR = STORAGE_DIR + "/Images to PDF";
 
     public static int THUMBSIZE = 1024;
 
@@ -37,6 +38,11 @@ public class FileManager {
     public static File getMergeFile(String fileName){
         new File(MERGE_DIR).mkdirs();
         return new File(MERGE_DIR+"/"+fileName+".pdf");
+    }
+
+    public static File getImagesTOPdfFile(String fileName){
+        new File(IMG_TO_DIR).mkdirs();
+        return new File(IMG_TO_DIR+"/"+fileName+".pdf");
     }
 
     public static String getSize(File file){
@@ -91,5 +97,17 @@ public class FileManager {
             Log.e("FileManager", "loadInfo: "+obj.toString());
         }
         return name;
+    }
+
+    public static String getPath(Context context,Uri uri){
+        String[] filePathColumn = {MediaStore.Images.Media.DATA};
+        Cursor cursor = context.getContentResolver().query(uri,filePathColumn,null,null,null);
+        if(cursor.moveToFirst()){
+            int columIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String path= cursor.getString(columIndex);
+            cursor.close();
+            return path;
+        }
+        return "ni maylu";
     }
 }

@@ -14,11 +14,18 @@ import android.widget.AdapterView;
 import com.csp.pdfviewer.adapters.GAMain;
 import com.csp.pdfviewer.databinding.ActivityMainBinding;
 import com.csp.pdfviewer.utilclasses.ACBar;
+import com.csp.pdfviewer.utilclasses.Launcher;
 
 public class MainActivity extends AppCompatActivity {
 
     final int REQ_CODE_OPEN=101;
+    final int REQ_CODE_MERGE=102;
     final int REQ_CODE_SPLIT=103;
+    final int REQ_CODE_IMAGES_TO_PDF=104;
+
+    Intent singlePdfPicker = Launcher.createPicker("application/pdf",false);
+    Intent multiPdfPicker = Launcher.createPicker("application/pdf",true);
+    Intent imagePicker = Launcher.createPicker("image/*",true);
 
     ActivityMainBinding binding;
     int req_code=-1;
@@ -39,53 +46,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 switch (position){
-                    case 0:openFile(REQ_CODE_OPEN);
+                    case 0:
+                        req_code=REQ_CODE_OPEN;
+                        launcher.launch(singlePdfPicker);
                         break;
-                    case 1: {
-                        Intent mergeIntent = new Intent(MainActivity.this, MergePdfActivity.class);
-                        startActivity(mergeIntent);
-                    }break;
-                    case 2:openFile(REQ_CODE_SPLIT);
+                    case 1:
+                        req_code=REQ_CODE_MERGE;
+                        launcher.launch(multiPdfPicker);
+                        break;
+                    case 2:
+                        req_code=REQ_CODE_SPLIT;
+                        launcher.launch(singlePdfPicker);
+                        break;
+                    case 3:
+                        req_code=REQ_CODE_IMAGES_TO_PDF;
+                        launcher.launch(imagePicker);
                         break;
                 }
             }
         });
     }
 
-
-    public void openFile(int requestCode) {
-        Intent pdfPickerIntent =new Intent();
-        pdfPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,false);
-        pdfPickerIntent.putExtra("reqCode",requestCode);
-        pdfPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
-        pdfPickerIntent.setType("application/pdf");
-        Intent picker=Intent.createChooser(pdfPickerIntent,"Choose PDF File");
-        req_code=requestCode;
-        launcher.launch(picker);
-    }
-
     ActivityResultLauncher<Intent> launcher=registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-        if(result.getResultCode()== Activity.RESULT_OK){
+        if(result.getResultCode()== Activity.RESULT_OK && result.getData()!=null){
+            Intent intent=result.getData();
             switch (req_code){
-                case REQ_CODE_OPEN:openPdf(result.getData().getData());
+                case REQ_CODE_OPEN:
+                    intent.setClass(this,PdfViewerActivity.class);
                     break;
-                case REQ_CODE_SPLIT:splitPdf(result.getData().getData());
+                case REQ_CODE_MERGE:
+                    intent.setClass(this,MergePdfActivity.class);
+                    break;
+                case REQ_CODE_SPLIT:
+                    intent.setClass(this,SplitPdfActivity.class);
+                    break;
+                case REQ_CODE_IMAGES_TO_PDF:
+                    intent.setClass(this,ImageToPdfActivity.class);
                     break;
             }
+            startActivity(intent);
         }
         req_code=-1;
     });
-
-    private void splitPdf(Uri fileUri) {
-        Intent openPdfIntent=new Intent(MainActivity.this,SplitPdfActivity.class);
-        openPdfIntent.setData(fileUri);
-        startActivity(openPdfIntent);
-    }
-
-    private void openPdf(Uri fileUri) {
-        Intent openPdfIntent=new Intent(MainActivity.this, PdfViewerActivity.class);
-        openPdfIntent.setData(fileUri);
-        startActivity(openPdfIntent);
-    }
 
 }

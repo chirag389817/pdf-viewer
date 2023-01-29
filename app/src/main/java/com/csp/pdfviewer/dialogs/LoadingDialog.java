@@ -9,14 +9,12 @@ public class LoadingDialog extends ProgressDialog{
         super(context);
         super.setCancelable(false);
         super.setMessage("Loading...");
-        super.setOnDismissListener(dialogInterface -> {
-            super.setMessage("Loading...");
-        });
     }
 
-    public void show(String msg){
+    public LoadingDialog(Context context,String msg) {
+        super(context);
+        super.setCancelable(false);
         super.setMessage(msg);
-        show();
     }
 
 }

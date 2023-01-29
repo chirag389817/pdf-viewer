@@ -1,21 +1,16 @@
 package com.csp.pdfviewer;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
-import android.annotation.SuppressLint;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.OpenableColumns;
 
 import com.csp.pdfviewer.databinding.ActivityPdfViewerBinding;
 import com.csp.pdfviewer.utilclasses.ACBar;
 import com.csp.pdfviewer.utilclasses.PdfInfo;
-import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.scroll.DefaultScrollHandle;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class PdfViewerActivity extends AppCompatActivity {
 
@@ -34,7 +29,12 @@ public class PdfViewerActivity extends AppCompatActivity {
 
         Objects.requireNonNull(getSupportActionBar()).setTitle(pdfInfo.name);
         binding.pdfView.fromUri(pdfInfo.uri)
+                .defaultPage(0)
+                .spacing(10)
                 .scrollHandle(new DefaultScrollHandle(this))
+                .onRender((nbPages, pageWidth, pageHeight) -> {
+                    binding.pdfView.fitToWidth();
+                })
                 .load();
     }
 

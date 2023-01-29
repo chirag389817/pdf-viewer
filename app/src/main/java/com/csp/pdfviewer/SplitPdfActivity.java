@@ -37,7 +37,7 @@ public class SplitPdfActivity extends AppCompatActivity {
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
 
-        loadingDialog=new LoadingDialog(this);
+        loadingDialog=new LoadingDialog(this,"Splitting...");
 
         initialLogic();
 
@@ -63,7 +63,7 @@ public class SplitPdfActivity extends AppCompatActivity {
             if(getCurrentFocus()!=null)
                 getCurrentFocus().clearFocus();
 
-            loadingDialog.show("Splitting...");
+            loadingDialog.show();
 
             new Handler().post(() -> {
                 PdfSplitter splitter = new PdfSplitter(getApplicationContext());

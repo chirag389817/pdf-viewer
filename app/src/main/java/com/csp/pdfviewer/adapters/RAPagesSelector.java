@@ -34,7 +34,7 @@ public class RAPagesSelector extends RecyclerView.Adapter<RAPagesSelector.ViewHo
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_page_thumbnail,parent,false),this);
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_thumbnail,parent,false),this);
     }
 
     @SuppressLint({"SetTextI18n", "NotifyDataSetChanged"})
