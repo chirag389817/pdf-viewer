@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     final int REQ_CODE_MERGE=102;
     final int REQ_CODE_SPLIT=103;
     final int REQ_CODE_IMAGES_TO_PDF=104;
+    final int REQ_CODE_PDF_TO_IMAGES=105;
 
     Intent singlePdfPicker = Launcher.createPicker("application/pdf",false);
     Intent multiPdfPicker = Launcher.createPicker("application/pdf",true);
@@ -45,21 +46,17 @@ public class MainActivity extends AppCompatActivity {
         binding.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                req_code=101+position;
                 switch (position){
                     case 0:
-                        req_code=REQ_CODE_OPEN;
+                    case 2:
+                    case 4:
                         launcher.launch(singlePdfPicker);
                         break;
                     case 1:
-                        req_code=REQ_CODE_MERGE;
                         launcher.launch(multiPdfPicker);
                         break;
-                    case 2:
-                        req_code=REQ_CODE_SPLIT;
-                        launcher.launch(singlePdfPicker);
-                        break;
                     case 3:
-                        req_code=REQ_CODE_IMAGES_TO_PDF;
                         launcher.launch(imagePicker);
                         break;
                 }
@@ -82,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case REQ_CODE_IMAGES_TO_PDF:
                     intent.setClass(this,ImageToPdfActivity.class);
+                    break;
+                case REQ_CODE_PDF_TO_IMAGES:
+                    intent.setClass(this,PdfToImageActivity.class);
                     break;
             }
             startActivity(intent);

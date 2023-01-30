@@ -33,6 +33,10 @@ public class PageSet {
         this.toPage=toPage;
     }
 
+    public PageSet(ArrayList<Integer> selectedPages) {
+        this.selectedPages=selectedPages;
+    }
+
     public ArrayList<Integer> getSelectedPages() {
         return selectedPages;
     }

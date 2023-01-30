@@ -15,8 +15,9 @@ import com.csp.pdfviewer.R;
 public class GAMain extends BaseAdapter {
 
     Context context;
-    String[] itemNames={"Open","Merge","Split","Image to\nPDF"};
-    int[] itemIcons={R.drawable.open_pdf,R.drawable.merge_pdf,R.drawable.split_pdf,R.drawable.images_to_pdf};
+    String[] itemNames={"Open","Merge","Split","Image to\nPDF","PDF to\nImages"};
+    int[] itemIcons={R.drawable.open_pdf,R.drawable.merge_pdf,R.drawable.split_pdf,
+            R.drawable.images_to_pdf,R.drawable.pdf_to_images};
 
     public GAMain(Context context){
         this.context=context;

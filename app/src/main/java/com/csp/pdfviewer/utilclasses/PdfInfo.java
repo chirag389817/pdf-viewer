@@ -23,7 +23,7 @@ public class PdfInfo {
 
     public Uri uri;
     public String name=null;
-    public Context context;
+    Context context;
     public String size=null;
     public int pageCount=-1;
     public File file;
@@ -31,6 +31,7 @@ public class PdfInfo {
     public PdfInfo(Context context,Uri uri){
         this.context=context;
         this.uri=uri;
+        Log.d("TAG", "PdfInfo:uri "+uri);
         file=new File(uri.getPath());
         loadInfo();
     }

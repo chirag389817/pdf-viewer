@@ -43,6 +43,10 @@ public class MergePdfActivity extends AppCompatActivity {
     RAPageSet raPageSet;
     LoadingDialog loadingDialog;
     NameDialog nameDialog;
+    ActivityResultLauncher<Intent> resultLauncher=Launcher.create(this,(listUri -> {
+        raPageSet.addPageSets(listUri);
+    }));
+    Intent pdfPicker = Launcher.createPicker("application/pdf",true);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +63,13 @@ public class MergePdfActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new Drager(raPageSet));
         itemTouchHelper.attachToRecyclerView(binding.recyclerView);
 
-        addPdfs();
+        raPageSet.addPageSets(Launcher.getUriData(getIntent()));
 
         loadingDialog=new LoadingDialog(this,"Merging...");
         nameDialog=new NameDialog(this);
         nameDialog.setOnConfirmListener(this::merge);
 
-        binding.cardAdd.setOnClickListener(view -> addPdfs());
+        binding.cardAdd.setOnClickListener(view -> resultLauncher.launch(pdfPicker));
 
         binding.cardMerge.setOnClickListener(view -> {
             if(getCurrentFocus()!=null)
@@ -98,32 +102,5 @@ public class MergePdfActivity extends AppCompatActivity {
             });
         });
     }
-
-    void addPdfs(){
-        Intent selectPdfs=new Intent(Intent.ACTION_GET_CONTENT);
-        selectPdfs.setType("application/pdf");
-        selectPdfs.putExtra(Intent.EXTRA_ALLOW_MULTIPLE,true);
-        Intent picker=Intent.createChooser(selectPdfs,"Select PDFs");
-        launcher.launch(picker);
-    }
-
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if(result.getResultCode()==RESULT_OK) {
-                    ArrayList<PageSet> fileUris = new ArrayList<>();
-                    if (result.getData().getData() != null) {
-                        fileUris.add(new PageSet(result.getData().getData()));
-                    }
-                    if (result.getData().getClipData() != null) {
-                        for (int i = 0; i < result.getData().getClipData().getItemCount(); i++) {
-                            fileUris.add(new PageSet(result.getData().getClipData().getItemAt(i).getUri()));
-                        }
-                    }
-                    raPageSet.addPageSets(fileUris);
-                }
-
-            }
-    );
 
 }

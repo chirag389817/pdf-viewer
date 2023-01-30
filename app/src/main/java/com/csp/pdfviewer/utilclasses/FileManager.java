@@ -22,6 +22,7 @@ public class FileManager {
     public static final String SPLIT_DIR = STORAGE_DIR + "/Split";
     public static final String MERGE_DIR = STORAGE_DIR + "/Merge";
     public static final String IMG_TO_DIR = STORAGE_DIR + "/Images to PDF";
+    public static final String PDF_TO_DIR = STORAGE_DIR + "/PDF to Images";
 
     public static int THUMBSIZE = 1024;
 
@@ -45,6 +46,9 @@ public class FileManager {
         return new File(IMG_TO_DIR+"/"+fileName+".pdf");
     }
 
+    public static File getPdfToImageFile(File dir, String name){
+        return new File(dir,name+".jpg");
+    }
     public static String getSize(File file){
         String size = size=Long.toString(file.length());
         int sizeInt=Integer.parseInt(size);
@@ -78,8 +82,8 @@ public class FileManager {
             e.printStackTrace();
             Log.d( "getThumbnail: ",e.toString());
         }
-        Bitmap thumbBitmap = ThumbnailUtils.extractThumbnail(bitmap,120,120);
-        return thumbBitmap;
+        final Bitmap bitmap1 = ThumbnailUtils.extractThumbnail(bitmap, 120, 120);
+        return bitmap1;
     }
 
     @SuppressLint("Range")

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,9 +75,10 @@ public class RAPageSet extends RABase<VHPageSet>{
         return pageSetArrayList.size();
     }
 
-    public void addPageSets(ArrayList<PageSet> pageSetArrayList){
-        this.pageSetArrayList.addAll(pageSetArrayList);
-        notifyItemRangeInserted(this.pageSetArrayList.size()-pageSetArrayList.size(),pageSetArrayList.size());
+    public void addPageSets(ArrayList<Uri> listUri){
+        for(Uri uri:listUri)
+            pageSetArrayList.add(new PageSet(uri));
+        notifyItemRangeInserted(this.pageSetArrayList.size()-listUri.size(),pageSetArrayList.size());
     }
 
     public void addPageSet(PageSet pageSet){

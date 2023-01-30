@@ -13,7 +13,6 @@ import com.csp.pdfviewer.utilclasses.ACBar;
 public class ResultActivity extends AppCompatActivity {
 
 
-    public static final String RESULT_TITLE_KEY = "Result_title_key";
     public static final String LIST_KEY = "List_key";
 
     ActivityResultBinding binding;
@@ -24,7 +23,6 @@ public class ResultActivity extends AppCompatActivity {
         binding=ActivityResultBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        ACBar.setActionBar(this,binding.getRoot(),getIntent().getStringExtra(RESULT_TITLE_KEY));
         loadResult();
     }
 
