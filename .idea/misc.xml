@@ -10,6 +10,7 @@
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/drawable/ic_baseline_play_arrow_24.xml" value="0.1505" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1505" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/activity_image_to_pdf.xml" value="0.2361111111111111" />
+        <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/activity_image_viewer.xml" value="0.25" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/activity_merge_pdf.xml" value="0.25" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/activity_pdf_to_image.xml" value="0.25" />
@@ -20,6 +21,7 @@
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/dialog_merge.xml" value="0.25" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/dialog_name.xml" value="0.25" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/item_grid_main.xml" value="0.24895833333333334" />
+        <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/item_image.xml" value="0.24895833333333334" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/item_page_set.xml" value="0.24895833333333334" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/item_page_thumbnail.xml" value="0.24895833333333334" />
         <entry key="..\:/Android/Projects/pdfviewer/app/src/main/res/layout/item_pdf_details.xml" value="0.24895833333333334" />

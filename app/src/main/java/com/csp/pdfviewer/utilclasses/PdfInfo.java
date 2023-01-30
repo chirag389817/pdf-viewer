@@ -48,7 +48,7 @@ public class PdfInfo {
                 cursor.close();
             }
         }catch (Exception obj){
-            Log.e("RAResult", "loadInfo: "+obj.toString());
+            Log.e("RAFileItem", "loadInfo: "+obj.toString());
         }
         if (name == null) {
             name = uri.getPath();

@@ -4,12 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,25 +15,21 @@ import com.csp.pdfviewer.PdfViewerActivity;
 import com.csp.pdfviewer.R;
 import com.csp.pdfviewer.databinding.ItemFileBinding;
 import com.csp.pdfviewer.utilclasses.FileInfo;
-import com.csp.pdfviewer.utilclasses.FileManager;
-import com.csp.pdfviewer.utilclasses.PdfInfo;
 
-import java.io.File;
 import java.util.ArrayList;
 
-public class RAResult extends RecyclerView.Adapter<RAResult.ViewHolder> {
+public class RAFileItem extends RecyclerView.Adapter<RAFileItem.ViewHolder> {
 
     Context context;
-    ArrayList<FileInfo> listFileInfo=new ArrayList<>();
-    Intent pdfOpner;
+    ArrayList<FileInfo> listFileInfo;
+    ViewHolder.OnClickListener onClickListener;
 
-    private static final String TAG = "RAResult";
+    private static final String TAG = "RAFileItem";
 
-    public RAResult(Context context, ArrayList<String> listPaths) {
+    public RAFileItem(Context context, ArrayList<FileInfo> listFileInfo, ViewHolder.OnClickListener onClickListener) {
         this.context = context;
-        this.pdfOpner= new Intent(context, PdfViewerActivity.class);
-        for(String path:listPaths)
-            listFileInfo.add(new FileInfo(context,path));
+        this.listFileInfo=listFileInfo;
+        this.onClickListener=onClickListener;
     }
 
     @NonNull
@@ -63,17 +56,19 @@ public class RAResult extends RecyclerView.Adapter<RAResult.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+
         ItemFileBinding binding;
-        public ViewHolder(@NonNull ItemFileBinding binding,RAResult adaper) {
+
+        public ViewHolder(@NonNull ItemFileBinding binding, RAFileItem adaper) {
             super(binding.getRoot());
             this.binding=binding;
             binding.getRoot().setOnClickListener(view -> {
-                FileInfo fileInfo=adaper.listFileInfo.get(getAdapterPosition());
-                if(fileInfo.name.endsWith(".pdf")){
-                    adaper.pdfOpner.setData(Uri.fromFile(fileInfo.file));
-                    adaper.context.startActivity(adaper.pdfOpner);
-                }
+                adaper.onClickListener.onClick(getAdapterPosition());
             });
+        }
+
+        public interface OnClickListener{
+            void onClick(int position);
         }
     }
 }

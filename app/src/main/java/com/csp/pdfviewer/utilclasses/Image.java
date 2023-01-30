@@ -13,6 +13,7 @@ import android.util.Size;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -24,7 +25,6 @@ public class Image {
 
     public Uri uri;
     public Bitmap bitmap;
-    public Bitmap thumbnail;
 
     public Image(Context context,Uri uri) {
         this.uri = uri;
@@ -35,6 +35,5 @@ public class Image {
             Log.e(TAG, "Image: "+e);
         }
     }
-
 
 }
